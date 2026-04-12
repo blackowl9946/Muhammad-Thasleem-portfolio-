@@ -278,17 +278,14 @@ img {
     overflow: hidden;
 }
 
-.fixed-bg {
+.interactive-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     z-index: -1;
-    background-image: url('background.png'); /* Relative path for git deployment */
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.4); 
+    background-color: #030712; /* Canvas baseline dark background */
 }
 
 .hero-overlay {
