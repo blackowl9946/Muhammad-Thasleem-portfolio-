@@ -104,35 +104,67 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. Form Submission Simulation ---
+    // --- 4. Google Form Submission ---
     const contactForm = document.getElementById('contactForm');
+    const successPopup = document.getElementById('successPopup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+    
+    // Popup Close Handlers
+    if (closePopupBtn) {
+        closePopupBtn.addEventListener('click', () => {
+            successPopup.classList.remove('active');
+        });
+    }
+    if (successPopup) {
+        successPopup.addEventListener('click', (e) => {
+            if (e.target === successPopup) {
+                successPopup.classList.remove('active');
+            }
+        });
+    }
+
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const btn = contactForm.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
             
-            // Basic simulation of sending message
+            // UI Update for sending state
             btn.textContent = 'Sending...';
             btn.style.opacity = '0.7';
             btn.disabled = true;
 
-            setTimeout(() => {
-                btn.textContent = 'Message Sent Successfully!';
-                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)'; // Green success
-                btn.style.opacity = '1';
-                
-                // Clear form
-                contactForm.reset();
+            const formData = new FormData(contactForm);
 
-                // Revert button after 3 seconds
+            // Fetch to Google Forms
+            fetch('https://docs.google.com/forms/u/0/d/e/1FAIpQLSf9-6y8Sz6baERy8y4DKfOe1mhVud1KiTtb7UsmHcImbx2I2Q/formResponse', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).then(() => {
+                // Show Popup
+                if (successPopup) {
+                    successPopup.classList.add('active');
+                }
+                
+                // Clear form & Revert button
+                contactForm.reset();
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.style.opacity = '1';
+                btn.disabled = false;
+                
+            }).catch((err) => {
+                console.error('Error:', err);
+                btn.textContent = 'Error Sending Message';
+                btn.style.background = 'red';
+                btn.style.opacity = '1';
                 setTimeout(() => {
                     btn.textContent = originalText;
-                    btn.style.background = ''; // Reverts to css variable
+                    btn.style.background = '';
                     btn.disabled = false;
                 }, 3000);
-                
-            }, 1500);
+            });
         });
     }
 });
