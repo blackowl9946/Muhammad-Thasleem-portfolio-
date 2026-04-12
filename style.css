@@ -41,6 +41,8 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 80px; /* Offset for sticky nav */
+    overflow-x: hidden;
+    width: 100%;
 }
 
 body {
@@ -49,6 +51,7 @@ body {
     color: var(--clr-text);
     line-height: 1.6;
     overflow-x: hidden;
+    width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
