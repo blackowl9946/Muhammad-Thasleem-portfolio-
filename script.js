@@ -26,23 +26,27 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         camera.position.setZ(30);
 
-        // Procedural Geometry (Abstract 3D Shape)
-        const geometry = new THREE.TorusKnotGeometry(12, 3, 120, 20);
-        const material = new THREE.MeshStandardMaterial({ 
-            color: 0x3b82f6, 
-            wireframe: true,
-            emissive: 0x1e3a8a,
-            emissiveIntensity: 0.3,
-            transparent: true,
-            opacity: 0.15 
-        });
-        const torus = new THREE.Mesh(geometry, material);
-        scene.add(torus);
+        // Load Custom 3D Model: HOUSE.glb
+        let loadedModel = null;
+        if (THREE.GLTFLoader) {
+            const loader = new THREE.GLTFLoader();
+            loader.load('HOUSE.glb', function(gltf) {
+                loadedModel = gltf.scene;
+                
+                // Set baseline scale and position
+                loadedModel.scale.set(5, 5, 5); 
+                loadedModel.position.set(0, -2, 0); 
+                
+                scene.add(loadedModel);
+            }, undefined, function (error) {
+                console.error('Error loading HOUSE.glb - if testing locally via file://, you must use a local server or test via GitHub pages!', error);
+            });
+        }
 
-        // Lighting
-        const pointLight = new THREE.PointLight(0xffffff, 1);
-        pointLight.position.set(20, 20, 20);
-        scene.add(pointLight, new THREE.AmbientLight(0xffffff, 0.8));
+        // Lighting (Brighter for custom textured models)
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+        directionalLight.position.set(10, 20, 10);
+        scene.add(directionalLight, new THREE.AmbientLight(0xffffff, 1.5));
 
         // Responsive Resizing
         window.addEventListener('resize', () => {
@@ -54,9 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // SCROLL to ROTATE logic!
         window.addEventListener('scroll', () => {
             const scrollDist = window.scrollY;
-            torus.rotation.x = scrollDist * -0.001;
-            torus.rotation.y = scrollDist * -0.002;
-            torus.rotation.z = scrollDist * -0.001;
+            if (loadedModel) {
+                loadedModel.rotation.y = scrollDist * -0.002;
+            }
         });
 
         // Animation Loop
