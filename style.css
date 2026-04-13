@@ -596,8 +596,21 @@ img {
     border: 1px solid rgba(0, 87, 255, 0.2);
 }
 
+
 .social-btn.behance:hover {
     background: #0057ff;
+    color: white;
+}
+
+.social-btn.instagram {
+    background: rgba(255, 0, 191, 0.075);
+    color: hsl(337, 100%, 50%);;
+    border: 1px solid rgb(255, 45, 115);
+}
+
+
+.social-btn.instagram:hover {
+    background: hsl(337, 100%, 50%);
     color: white;
 }
 
