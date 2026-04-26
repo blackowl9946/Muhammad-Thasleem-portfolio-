@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
             antialias: true
         });
         
+        // High-Quality Renderer Settings
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+        
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         camera.position.setZ(30);
@@ -45,26 +50,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 const scale = 15 / maxDim; // Target max size of 15 units
                 loadedModel.scale.set(scale, scale, scale);
                 
-                // 3. Fallback Visibility Glow
-                // If the model exports as pure black without textures, this guarantees it stays visible on the dark background.
-                loadedModel.traverse((child) => {
-                    if (child.isMesh && child.material) {
-                        child.material.emissive = new THREE.Color(0x1e3a8a); // Faint dark blue glow
-                        child.material.emissiveIntensity = 0.5;
-                        child.material.needsUpdate = true;
-                    }
-                });
+                // Preserve original model materials! 
+                // Removed the artificial blue glow so the house renders exactly as exported from Blender.
                 
                 scene.add(loadedModel);
             }, undefined, function (error) {
                 console.error('Error loading HOUSE.glb - if testing locally via file://, you must use a local server or test via GitHub pages!', error);
             });
         }
+        // Professional Lighting Setup (Key, Fill, and Ambient)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); 
+        scene.add(ambientLight);
 
-        // Lighting (Brighter for custom textured models)
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-        directionalLight.position.set(10, 20, 10);
-        scene.add(directionalLight, new THREE.AmbientLight(0xffffff, 1.5));
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        keyLight.position.set(10, 20, 10);
+        scene.add(keyLight);
+
+        const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        fillLight.position.set(-15, 5, -10);
+        scene.add(fillLight);
 
         // Responsive Resizing
         window.addEventListener('resize', () => {
