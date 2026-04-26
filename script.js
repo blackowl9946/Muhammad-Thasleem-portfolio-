@@ -55,17 +55,26 @@ document.addEventListener('DOMContentLoaded', () => {
             camera.updateProjectionMatrix();
         });
 
-        // SCROLL to ROTATE logic!
+        // Clock for animations & time-based rotation
+        const clock = new THREE.Clock();
+        let scrollOffset = 0;
+
+        // SCROLL to ROTATE logic (update offset target)
         window.addEventListener('scroll', () => {
-            const scrollDist = window.scrollY;
-            if (loadedModel) {
-                loadedModel.rotation.y = scrollDist * -0.002;
-            }
+            scrollOffset = window.scrollY * -0.002;
         });
 
         // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            
+            if (loadedModel) {
+                // Continuous Idle Base Rotation + Scroll Turntable Offset
+                const idleSpin = clock.getElapsedTime() * 0.05; 
+                loadedModel.rotation.y = idleSpin + scrollOffset;
+            }
+
             renderer.render(scene, camera);
         }
         animate();

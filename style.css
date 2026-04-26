@@ -596,10 +596,24 @@ img {
     border: 1px solid rgba(0, 87, 255, 0.2);
 }
 
+
 .social-btn.behance:hover {
     background: #0057ff;
     color: white;
 }
+
+.social-btn.instagram {
+    background: rgba(225, 48, 108, 0.1);
+    color: #e1306c;
+    border: 1px solid rgba(225, 48, 108, 0.2);
+}
+
+.social-btn.instagram:hover {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
+}
+
+
 
 .contact-form .form-group {
     margin-bottom: 1.5rem;
