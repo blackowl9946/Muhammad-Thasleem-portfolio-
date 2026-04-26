@@ -70,11 +70,22 @@ document.addEventListener('DOMContentLoaded', () => {
         fillLight.position.set(-15, 5, -10);
         scene.add(fillLight);
 
+        // Responsive Layout Positioning
+        function updateCameraPosition() {
+            if (window.innerWidth > 768) {
+                camera.position.x = -6; // Moves camera left, pushing object to mid-right
+            } else {
+                camera.position.x = 0; // Center on phone
+            }
+        }
+        updateCameraPosition(); // Initial apply
+
         // Responsive Resizing
         window.addEventListener('resize', () => {
             renderer.setSize(canvas.clientWidth, canvas.clientHeight);
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
             camera.updateProjectionMatrix();
+            updateCameraPosition();
         });
 
         // Clock for animations & time-based rotation
