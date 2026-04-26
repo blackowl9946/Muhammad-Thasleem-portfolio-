@@ -32,10 +32,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const loader = new THREE.GLTFLoader();
             loader.load('HOUSE.glb', function(gltf) {
                 loadedModel = gltf.scene;
+                // 1. Auto-center the model precisely
+                const box = new THREE.Box3().setFromObject(loadedModel);
+                const center = box.getCenter(new THREE.Vector3());
+                loadedModel.position.x += (loadedModel.position.x - center.x);
+                loadedModel.position.y += (loadedModel.position.y - center.y);
+                loadedModel.position.z += (loadedModel.position.z - center.z);
                 
-                // Set baseline scale and position
-                loadedModel.scale.set(5, 5, 5); 
-                loadedModel.position.set(0, -2, 0); 
+                // 2. Auto-scale the model so it mathematically fits perfectly in the camera
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 15 / maxDim; // Target max size of 15 units
+                loadedModel.scale.set(scale, scale, scale);
+                
+                // 3. Fallback Visibility Glow
+                // If the model exports as pure black without textures, this guarantees it stays visible on the dark background.
+                loadedModel.traverse((child) => {
+                    if (child.isMesh && child.material) {
+                        child.material.emissive = new THREE.Color(0x1e3a8a); // Faint dark blue glow
+                        child.material.emissiveIntensity = 0.5;
+                        child.material.needsUpdate = true;
+                    }
+                });
                 
                 scene.add(loadedModel);
             }, undefined, function (error) {
