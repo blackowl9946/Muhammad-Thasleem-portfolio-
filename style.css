@@ -625,6 +625,17 @@ img {
     color: white;
 }
 
+.social-btn.discord {
+    background: rgba(88, 101, 242, 0.1);
+    color: #5865F2;
+    border: 1px solid rgba(88, 101, 242, 0.2);
+}
+
+.social-btn.discord:hover {
+    background: #5865F2;
+    color: white;
+}
+
 
 
 .contact-form .form-group {
