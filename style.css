@@ -575,6 +575,7 @@ img {
     padding: 0.5rem 1.5rem;
     border-radius: 50px;
     margin-right: 0.5rem;
+    margin-bottom: 0.8rem; /* Prevents touching on mobile wrap */
     font-weight: 600;
     transition: var(--transition);
 }
